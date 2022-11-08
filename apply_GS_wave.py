@@ -1,22 +1,13 @@
 
-<<<<<<< HEAD
 import graphScattering as GSTransform
-=======
-import GStransforms.Modules.graphScattering as GSTransform
->>>>>>> eb5bdba03f8b6f6ba1a0db07f67847778baac663
 import numpy as np
 import pickle
 import sys
 from scipy.spatial.distance import pdist, squareform
-<<<<<<< HEAD
 import os
 from varname import nameof
 
 """
-=======
-
-
->>>>>>> eb5bdba03f8b6f6ba1a0db07f67847778baac663
 
 #define node/graph properties
 nfeat = 32
@@ -47,14 +38,9 @@ for i in range(bs):
     findx = findx + nnodes
     sindx = sindx + nnodes
 
-<<<<<<< HEAD
 print("Pre-graph shape",nmat.shape)
 
 sparsemeasure = False
-=======
-
-sparsemeasure = True
->>>>>>> eb5bdba03f8b6f6ba1a0db07f67847778baac663
 
 if sparsemeasure == True:
 
@@ -68,7 +54,6 @@ if sparsemeasure == True:
     nnodes = nnmesh.shape[2]
 
 
-<<<<<<< HEAD
 else: 
     nnmesh = nmat
 
@@ -123,48 +108,6 @@ def get_scattering(nnmesh):
     print(finalmat.shape)
 
     return finalmat
-=======
-else:
-    nnmesh = nmat
-
-
-#Compute adjacency matrices
-D = squareform(pdist(nnmesh[0,:,:].T))
-sigma = 3
-A = np.exp(-D**2/sigma)
-
-# Perform graph scattering transform which goes from graph space to euclidean space and gives GS features
-nscale = 5 # Changes the number of frequencies you cna resolve
-nlayers = 3
-nmoments = 1
-GS = GSTransform.GeometricScattering(nscale,nlayers,nmoments,A) #initialize class
-transformedgraph = GS.computeTransform(np.expand_dims(nnmesh[0,:,:],0)) #output is (batch size x features x (scales * moments))
-# output is a feature augmented matrix where each feauture has now been agumented by (diffusion scattering coeffficinets)
-
-
-# Create new graph of shape [nnodes x geometric scatering features] by performing matrix multiplication
-gsmat = np.empty((bs,nnodes,transformedgraph.shape[2]))
-for i in range(bs):
-
-    D = squareform(pdist(nnmesh[i,:,:].T))
-    sigma = 3
-    A = np.exp(-D**2/sigma)
-    GS = GSTransform.GeometricScattering(nscale,nlayers,nmoments,A)
-    transformedgraph = GS.computeTransform(np.expand_dims(nnmesh[i,:,:],0)) 
-    gsmat[i,:,:] = nnmesh[i,:,:].T @ transformedgraph[0,:,:].squeeze()
-
-print("Input feature matrix shape:",nnmesh.shape)
-x=np.swapaxes(nnmesh,1,2)
-print("After swapping axes:",x.shape)
-print("Geometric scattering transform shape:",gsmat.shape)
-
-ngsmat = np.concatenate((x,gsmat),axis=-1) #Concatenating arrays 
-print(ngsmat.shape)
-
-
-with open("/home/dami/Inverse_GNN/FEM_output/gspdata_wave","wb") as fb:
-    pickle.dump(ngsmat,fb)
->>>>>>> eb5bdba03f8b6f6ba1a0db07f67847778baac663
 
 
 
@@ -184,8 +127,4 @@ print(indnodes)
 
 # Construct new dim-reduced graph with less nodes (only nodes that explain variance)
 
-<<<<<<< HEAD
 """
-=======
-"""
->>>>>>> eb5bdba03f8b6f6ba1a0db07f67847778baac663
